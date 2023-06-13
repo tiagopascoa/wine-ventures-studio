@@ -1,9 +1,10 @@
 import {defineField, defineType} from 'sanity'
 
 export default defineType({
-  name: 'post',
-  title: 'Post',
+  name: 'article',
+  title: 'Media Articles',
   type: 'document',
+  i18n: true,
   fields: [
     defineField({
       name: 'title',
@@ -20,10 +21,10 @@ export default defineType({
       },
     }),
     defineField({
-      name: 'author',
-      title: 'Author',
-      type: 'reference',
-      to: {type: 'author'},
+      name: 'articleSummary',
+      title: 'Article summary',
+      type: 'text',
+      validation: (Rule) => Rule.max(120).warning('Should be less than 120 characters'),
     }),
     defineField({
       name: 'mainImage',
@@ -32,12 +33,6 @@ export default defineType({
       options: {
         hotspot: true,
       },
-    }),
-    defineField({
-      name: 'categories',
-      title: 'Categories',
-      type: 'array',
-      of: [{type: 'reference', to: {type: 'category'}}],
     }),
     defineField({
       name: 'publishedAt',
@@ -49,17 +44,17 @@ export default defineType({
       title: 'Body',
       type: 'blockContent',
     }),
+    defineField({
+      name: 'order',
+      title: 'Order',
+      type: 'number',
+    }),
   ],
 
   preview: {
     select: {
       title: 'title',
-      author: 'author.name',
       media: 'mainImage',
-    },
-    prepare(selection) {
-      const {author} = selection
-      return {...selection, subtitle: author && `by ${author}`}
     },
   },
 })
